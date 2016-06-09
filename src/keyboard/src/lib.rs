@@ -16,7 +16,7 @@ pub fn write_to_buffer(c: u8) {
     }
 }
 
-pub fn read_from_buffer() -> &'static [u8] {
+fn read_from_buffer() -> &'static [u8] {
     unsafe {
         let start = BUFFER_READ_IDX;
         BUFFER_READ_IDX = BUFFER_WRITE_IDX;
@@ -25,7 +25,10 @@ pub fn read_from_buffer() -> &'static [u8] {
     }
 }
 
-pub fn gets(buf: &mut [u8]) {
+
+/// gets fills a buff with everything up till a newline, and returns a slice of buff, not including
+/// the newline.
+pub fn gets(buf: &mut [u8]) -> &[u8] {
     let mut last_index = 0;
 
     loop {
@@ -46,6 +49,8 @@ pub fn gets(buf: &mut [u8]) {
             break;
         }
     }
+
+    &buf[..last_index - 1]
 }
 
 pub fn getchar(scancode: u8) -> Option<u8> {

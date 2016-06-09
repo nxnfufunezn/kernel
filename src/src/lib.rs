@@ -31,15 +31,9 @@ pub extern "C" fn kmain() -> ! {
         kprint!("> ");
 
 		let mut buf = [0; 32];
-		keyboard::gets(&mut buf[..]);
+		let result = keyboard::gets(&mut buf[..]);
 
-        let s = parse(&buf[..]);
+        let s = core::str::from_utf8(result).unwrap();
         kprintln!("we got: '{}'", s);
     }
-}
-
-fn parse(buf: &[u8]) -> &str {
-    // These unwraps should go away.
-    let index = buf.iter().position(|&c| c == b'\n').unwrap();
-    core::str::from_utf8(&buf[0..index]).unwrap()
 }
