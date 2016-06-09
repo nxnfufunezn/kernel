@@ -2,6 +2,25 @@
 
 static mut CAPS: bool = false;
 static mut SHIFT: bool = false;
+static mut BUFFER: [char; 256] = [' '; 256];
+static mut BUFFER_WRITE_IDX: usize = 0;
+static mut BUFFER_READ_IDX: usize = 0;
+
+pub fn write_to_buffer(c: char) {
+    unsafe {
+        BUFFER[BUFFER_WRITE_IDX] = c;
+        BUFFER_WRITE_IDX += 1;
+    }
+}
+
+pub fn read_from_buffer() -> &'static [char] {
+    unsafe {
+        let start = BUFFER_READ_IDX;
+        BUFFER_READ_IDX = BUFFER_WRITE_IDX;
+
+        &BUFFER[start..BUFFER_WRITE_IDX]
+    }
+}
 
 pub fn getchar(scancode: u8) -> Option<char> {
     unsafe {

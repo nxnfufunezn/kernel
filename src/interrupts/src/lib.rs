@@ -182,7 +182,15 @@ fn keyboard_handler() {
     let scancode = unsafe { inb(0x60) };
 
     keyboard::getchar(scancode).map(|c| {
+        keyboard::write_to_buffer(c);
         kprint!("{}", c);
+
+        if c == '\n' {
+            let data = keyboard::read_from_buffer();
+            if data == ['h', 'e', 'l', 'l', 'o', '\n'] {
+                kprintln!("Well hello there!");
+            }
+        }
     });
 }
 
