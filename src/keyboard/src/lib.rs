@@ -1,5 +1,8 @@
 #![no_std]
 
+#[macro_use]
+extern crate vga;
+
 static mut CAPS: bool = false;
 static mut SHIFT: bool = false;
 static mut BUFFER: [char; 256] = [' '; 256];
@@ -19,6 +22,29 @@ pub fn read_from_buffer() -> &'static [char] {
         BUFFER_READ_IDX = BUFFER_WRITE_IDX;
 
         &BUFFER[start..BUFFER_WRITE_IDX]
+    }
+}
+
+pub fn gets(buf: &mut [char]) {
+    let mut last_index = 0;
+
+    loop {
+        let chars = read_from_buffer();
+        let chars_len = chars.len();
+
+        if chars_len == 0 {
+            continue;
+        }
+
+        for i in 0..chars_len {
+            buf[last_index + i] = chars[i];
+        }
+
+        last_index += chars_len;
+
+        if buf[last_index - 1]  == '\n' {
+            break;
+        }
     }
 }
 

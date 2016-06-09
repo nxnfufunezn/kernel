@@ -9,6 +9,7 @@ extern crate vga;
 
 extern crate interrupts;
 extern crate pic;
+extern crate keyboard;
 
 pub mod support; // For Rust lang items
 
@@ -25,5 +26,11 @@ pub extern "C" fn kmain() -> ! {
 
     kprintln!("Kernel initialized.");
 
-    loop { }
+    loop {
+		// this will be a shell someday...
+        kprint!("> ");
+		let mut buf = [' '; 32];
+		keyboard::gets(&mut buf[..]);
+        kprintln!("we got: {:?}", buf);
+    }
 }
