@@ -9,11 +9,14 @@ extern crate rlibc;
 extern crate vga;
 
 extern crate interrupts;
+extern crate pic;
 
 pub mod support; // For Rust lang items
 
 #[no_mangle]
 pub extern "C" fn kmain() -> ! {
+    pic::remap();
+
     vga::clear_console();
 
     unsafe {

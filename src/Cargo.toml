@@ -10,6 +10,7 @@ crate-type = ["staticlib"]
 rlibc = "1.0.0"
 vga = { path = "vga" }
 interrupts = { path = "interrupts" }
+pic = { path = "pic" }
 
 [profile.dev]
 panic = "abort"
