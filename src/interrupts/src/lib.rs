@@ -181,8 +181,8 @@ pub extern "C" fn interrupt_handler(interrupt_number: isize, error_code: isize) 
 fn keyboard_handler() {
     let scancode = unsafe { inb(0x60) };
 
-    keyboard::from_scancode(scancode).map(|code| {
-        kprint!("{}", code);
+    keyboard::getchar(scancode).map(|c| {
+        kprint!("{}", c);
     });
 }
 
