@@ -7,6 +7,8 @@ extern crate vga;
 #[macro_use]
 extern crate lazy_static;
 
+extern crate pic;
+
 extern {
     fn isr0();
     fn isr1();
@@ -168,15 +170,9 @@ pub extern "C" fn interrupt_handler(interrupt_number: isize, error_code: isize) 
         33 => keyboard_handler(),
         _ => panic!("interrupt {} with error code {:x}", interrupt_number, error_code),
     }
-    unsafe{
-        match interrupt_number {
-            i if i >= 40 => {
-                outb(0xA0, 0x20);
-                outb(0x20, 0x20);
-            },
-            32...40 => outb(0x20, 0x20),
-            _ => {},
-        }
+    unsafe {
+        pic::eoi_for(interrupt_number);
+
         enable();
     };
 }
@@ -187,13 +183,8 @@ fn keyboard_handler() {
 }
 
 #[inline]
-pub unsafe fn inb(port: u16) -> u8 {
+unsafe fn inb(port: u16) -> u8 {
     let ret : u8;
     asm!("inb $1, $0" : "={ax}"(ret) : "{dx}N"(port) : : "volatile");
     return ret;
-}
-
-#[inline]
-pub unsafe fn outb(port: u16, val: u8) {
-    asm!("outb $1, $0" : : "{dx}N"(port), "{al}"(val) : : "volatile");
 }
