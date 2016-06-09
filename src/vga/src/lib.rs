@@ -163,9 +163,3 @@ pub fn clear_console() {
     let mut b = BUFFER.lock();
     b.clear();
 }
-
-#[allow(non_snake_case)]
-#[no_mangle]
-pub extern "C" fn _Unwind_Resume() -> ! {
-    panic!("lol");
-}
