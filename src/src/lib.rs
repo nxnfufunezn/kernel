@@ -16,16 +16,18 @@ pub mod support; // For Rust lang items
 #[no_mangle]
 pub extern "C" fn kmain() -> ! {
     pic::remap();
-
-    vga::clear_console();
-
     interrupts::install();
     interrupts::enable();
 
+    vga::clear_console();
     kprintln!("Kernel initialized.");
 
+    shell();
+}
+
+/// someday, this will be a real shell
+fn shell() -> ! {
     loop {
-		// this will be a shell someday...
         kprint!("> ");
 
 		let mut buf = [0; 32];
