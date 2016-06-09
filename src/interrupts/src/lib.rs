@@ -183,7 +183,7 @@ fn keyboard_handler() {
 
     keyboard::getchar(scancode).map(|c| {
         keyboard::write_to_buffer(c);
-        kprint!("{}", c);
+        kprint!("{}", c as char);
     });
 }
 
