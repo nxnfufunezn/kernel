@@ -8,6 +8,7 @@ extern crate vga;
 extern crate lazy_static;
 
 extern crate pic;
+extern crate keyboard;
 
 extern {
     fn isr0();
@@ -179,7 +180,10 @@ pub extern "C" fn interrupt_handler(interrupt_number: isize, error_code: isize) 
 
 fn keyboard_handler() {
     let scancode = unsafe { inb(0x60) };
-    kprintln!("code: {}", scancode);
+
+    keyboard::from_scancode(scancode).map(|code| {
+        kprint!("{}", code);
+    });
 }
 
 #[inline]
